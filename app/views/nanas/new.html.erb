@@ -1,0 +1,36 @@
+<div class="french-bg">
+  <div class="french-container">
+    
+    <header class="french-header">
+      <h1 class="french-title">💭 New Page 💭</h1>
+      <p class="french-subtitle">今のリアルな気持ちを言葉に変えて</p>
+    </header>
+
+    <%= form_with(model: @nana, local: true, class: "french-form") do |form| %>
+      <% if @nana.errors.any? %>
+        <div class="french-error">
+          <h3>🚨 うまく保存できませんでした</h3>
+          <ul>
+            <% @nana.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="french-field">
+        <%= form.label :name, "🌹名前", class: "french-label" %>
+        <%= form.text_field :name, class: "french-input", placeholder: "お名前" %>
+      </div>
+
+      <div class="french-footer">
+        <%= form.submit "保存する 🎀", class: "french-main-btn" %>
+      </div>
+    <% end %>
+
+    <div class="french-back-area">
+      <%= link_to "◀ 一覧へ戻る", nanas_path, class: "french-back-link" %>
+    </div>
+
+  </div>
+</div>

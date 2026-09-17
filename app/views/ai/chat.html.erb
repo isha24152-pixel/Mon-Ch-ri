@@ -1,0 +1,87 @@
+<div class="french-bg">
+  <div class="french-container">
+    
+    <header class="line-header">
+      <h1 class="line-talk-title">🌹 Talk with <%= @nana.name %> 🌹</h1>
+      <p class="line-talk-subtitle">Gemini Mode</p>
+    </header>
+
+    <div class="line-chat-room">
+      <% if @ai_response.present? %>
+        <% @ai_response.split("\n\n").each do |block| %>
+          <% next if block.blank? %>
+          
+          <% if block.include?("あなた:") %>
+            <!-- ユーザー側（右の吹き出し） -->
+            <div class="line-msg-row user-side">
+              <div class="line-bubble">
+                <%= simple_format(block.gsub("あなた:", "").strip) %>
+              </div>
+            </div>
+
+          <% else %>
+            <!-- AI側（左の吹き出し） -->
+            <div class="line-msg-row ai-side">
+              <div class="line-avatar">💭</div>
+              <div class="line-msg-content">
+                <span class="line-author-name">✨ <%= @nana.name %></span>
+                <div class="line-bubble">
+                  <% 
+                    text_data = block.gsub("AI:", "").strip
+                    img_src = nil
+
+                    # [IMG_URL: https://...] を検出してURLだけを取り出し、テキストから削除する処理
+                    if text_data =~ /\[IMG_URL:\s*(.*?)\]/m
+                      img_src = $1.strip
+                      text_data = text_data.gsub(/\[IMG_URL:\s*.*?\]/m, '').strip
+                    end
+                  %>
+
+                  <!-- ① テキスト文章を表示 -->
+                  <%= simple_format(text_data) %>
+
+                  <!-- ② [IMG_URL:] があった場合はURL文字列ではなく「画像（<img>）」として表示 -->
+                  <% if img_src.present? %>
+                    <div style="margin-top: 15px; text-align: center; position: relative;">
+                      <p style="font-size: 12px; color: #bc8f8f; margin-bottom: 6px; font-weight: bold;">🎨 感情から生まれた生き物</p>
+                      
+                      <!-- 読み込み中表示 -->
+                      <div class="img-loading-placeholder" style="padding: 20px; font-size: 12px; color: #bc8f8f; background-color: #fff0f5; border: 2px dashed #e0c0c0; border-radius: 15px;">
+                        🌸 生き物を描いています...
+                      </div>
+
+                      <!-- 実際の画像（ロード完了時に表示） -->
+                      <img src="<%= img_src %>" 
+                           alt="感情から生まれた生き物" 
+                           style="width: 100%; max-width: 280px; height: auto; border-radius: 15px; border: 3px solid #bc8f8f; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none;" 
+                           onload="this.previousElementSibling.style.display='none'; this.style.display='inline-block';"
+                           onerror="this.onerror=null; this.previousElementSibling.innerHTML='⚠️ 画像の読み込みに失敗しました'; this.src='https://via.placeholder.com/300x300?text=Error';" />
+                    </div>
+                  <% end %>
+
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- 入力フォーム -->
+    <%= form_with url: "/ai", method: :get, local: true, class: "line-input-bar" do |form| %>
+      <%= form.hidden_field :nana_id, value: @nana.id %>
+      <div class="line-input-wrapper">
+        <span class="line-plus-icon">＋</span>
+        <%= form.text_field :user_input, class: "line-text-field", placeholder: "メッセージを入力...", autocomplete: "off" %>
+        <%= form.button type: :submit, class: "line-send-btn" do %>🎀<% end %>
+      </div>
+    <% end %>
+
+    <div class="french-back-area">
+      <%= link_to "◀ 本棚（一覧）に戻る", nanas_path, class: "french-back-link" %>
+    </div>
+
+   <%= link_to "📅 カレンダーを見る", nana_calendar_path(@nana), class: "french-back-link", style: "margin-left: 15px;" %>
+  </div>
+</div>

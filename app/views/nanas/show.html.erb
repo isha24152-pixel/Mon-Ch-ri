@@ -1,0 +1,11 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @nana %>
+
+<div>
+  <%= link_to "Edit this nana", edit_nana_path(@nana) %> |
+  <%= link_to "Back to nanas", nanas_path %>
+
+  <%= button_to "Destroy this nana", @nana, method: :delete %>
+  <%= link_to "🤖 この件をAIに相談する", "/ai?nana_id=#{@nana.id}", data: { turbo: false } %>
+</div>

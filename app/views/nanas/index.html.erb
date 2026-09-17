@@ -1,0 +1,37 @@
+<div class="french-bg">
+  <div class="french-container">
+    
+    <header class="french-header">
+      <h1 class="french-title">🎀 Mon Chéri 🎀</h1>
+    </header>
+
+    <div class="french-list">
+      <% if @nanas.empty? %>
+        <div class="french-empty">
+          <p>まだ引き出しはからっぽです 🕊️</p>
+          <p>新しい気持ちをノートに綴ってみましょう。</p>
+        </div>
+      <% else %>
+        <% @nanas.each_with_index do |nana, index| %>
+          <div class="french-card">
+            <div class="french-card-left">
+              <span class="french-id">Memory #<%= index + 1 %></span>
+              <strong class="french-name"><%= nana.name %></strong>
+            </div>
+            
+            <div class="french-card-right">
+              <%= link_to "💬 お話する", "/ai?nana_id=#{nana.id}", data: { turbo: false }, class: "french-btn btn-pink-rose" %>
+              <a href="/nanas/<%= nana.id %>/calendar" class="french-btn french-btn-calendar"> カレンダー</a>
+            </div>
+          </div>
+          
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="french-footer">
+      <%= link_to "＋ 追加🎀", new_nana_path, class: "french-main-btn" %>
+    </div>
+   
+  </div>
+</div>

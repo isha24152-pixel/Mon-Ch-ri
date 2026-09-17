@@ -1,0 +1,69 @@
+<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+  <h1 style="text-align: center; color: #d87093;">🌸 <%= @nana.name %> との思い出カレンダー 🌸</h1>
+
+  <div style="margin-bottom: 20px; text-align: center;">
+    <a href="/ai?nana_id=<%= @nana.id %>" style="color: #b5651d; font-weight: bold; text-decoration: none;">◀ トーク画面に戻る</a>
+  </div>
+
+  <%= month_calendar(events: @logs, attribute: :date) do |date, logs| %>
+    <div style="font-size: 12px; font-weight: bold;"><%= date.day %></div>
+    <div style="min-height: 60px;">
+      <% logs.each_with_index do |log, index| %>
+        <!-- クリック可能なカード -->
+        <div onclick="openModal('<%= date %>-<%= index %>')" style="background-color: #fff0f5; border-radius: 8px; padding: 4px; margin-top: 4px; cursor: pointer; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+          <% if log.image_url.present? %>
+            <img src="<%= log.image_url %>" style="width: 100%; height: 45px; object-fit: cover; border-radius: 4px; display: block;">
+          <% end %>
+          <% if log.creature_name.present? %>
+            <div style="font-size: 10px; color: #4a4a4a; text-align: center; font-weight: bold; margin-top: 2px;">🐾 <%= log.creature_name %></div>
+          <% end %>
+        </div>
+
+        <!-- ポップアップモーダル本体（初期状態は非表示） -->
+        <div id="modal-<%= date %>-<%= index %>" class="calendar-modal" onclick="closeModal('<%= date %>-<%= index %>')">
+          <div class="calendar-modal-content" onclick="event.stopPropagation();">
+            <span class="calendar-modal-close" onclick="closeModal('<%= date %>-<%= index %>')">&times;</span>
+            <h3 style="color: #d87093; text-align: center; margin-top: 0;">🌸 <%= date.strftime("%Y年%m月%d日") %> の思い出 🌸</h3>
+            
+            <% if log.image_url.present? %>
+              <div style="text-align: center; margin: 15px 0;">
+                <img src="<%= log.image_url %>" style="max-width: 100%; max-height: 250px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);">
+              </div>
+            <% end %>
+
+            <% if log.creature_name.present? %>
+              <div style="text-align: center; font-weight: bold; color: #b5651d; margin-bottom: 10px;">
+                名前: <%= log.creature_name %>
+              </div>
+            <% end %>
+
+            <div style="background-color: #fff8f8; border-radius: 8px; padding: 12px; border: 1px solid #ffe4e1; white-space: pre-wrap; font-size: 13px; color: #333; max-height: 200px; overflow-y: auto;">
+              <%= log.content %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .simple-calendar { width: 100%; border-collapse: collapse; background: #fff8f8; border-radius: 12px; }
+  .simple-calendar th { background: #ffe4e1; padding: 10px; color: #8b4513; }
+  .simple-calendar td { border: 1px solid #ffe4e1; height: 95px; vertical-align: top; padding: 4px; width: 14%; }
+
+  /* モーダルのスタイル */
+  .calendar-modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(3px); }
+  .calendar-modal-content { background-color: #ffffff; margin: 10% auto; padding: 20px; border-radius: 16px; width: 85%; max-width: 480px; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+  .calendar-modal-close { position: absolute; right: 15px; top: 10px; color: #aaa; font-size: 24px; font-weight: bold; cursor: pointer; }
+  .calendar-modal-close:hover { color: #d87093; }
+</style>
+
+<script>
+  function openModal(id) {
+    document.getElementById('modal-' + id).style.display = 'block';
+  }
+  function closeModal(id) {
+    document.getElementById('modal-' + id).style.display = 'none';
+  }
+</script>

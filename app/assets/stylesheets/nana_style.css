@@ -1,0 +1,425 @@
+/* app/assets/stylesheets/nana_style.css */
+
+/* 1. 全体の背景：もらった画像のような、上品なくすみピンクベージュ */
+body, .french-bg {
+  background-color: #f7ebe6; /* 白桃のようなトープピンク */
+  background-image: 
+    radial-gradient(#fff5f2 20%, transparent 20%),
+    radial-gradient(#fff5f2 20%, transparent 20%);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  margin: 0;
+  padding: 40px 10px;
+  min-height: 100vh;
+  font-family: 'Times New Roman', 'Hiragino Mincho ProN', 'serif'; /* 大人っぽい明朝体フォント */
+  box-sizing: border-box;
+}
+
+/* 2. 中央のホワイトボード：アンティークな大理石やヴィンテージ家具の白 */
+.french-container {
+  max-width: 520px;
+  margin: 0 auto;
+  background-color: #ffffff; /* 完全な白で文字が超はっきり読める */
+  border: 2px solid #e2c1b6; /* 優しいローズゴールドのフチ */
+  border-radius: 20px;
+  padding: 40px 25px;
+  box-shadow: 0 10px 30px rgba(163, 125, 114, 0.15); /* 柔らかい影 */
+}
+
+/* ヘッダー */
+.french-header {
+  text-align: center;
+  margin-bottom: 35px;
+  border-bottom: 1px dashed #e2c1b6;
+  padding-bottom: 20px;
+}
+.french-title {
+  color: #a47568; /* 上品なローズブラウン */
+  font-size: 28px;
+  font-weight: normal;
+  margin: 0 0 8px 0;
+  letter-spacing: 1px;
+}
+.french-subtitle {
+  color: #bfa399;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* カードリスト */
+.french-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* リストの1枠：白背景に映える、ほんのりピンクがかった可愛いカード */
+.french-card {
+  background-color: #fffaf8;
+  border: 1px solid #ebd3cb;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+.french-card:hover {
+  background-color: #ffffff;
+  border-color: #a47568;
+  box-shadow: 0 5px 15px rgba(164, 117, 104, 0.1);
+}
+
+.french-id {
+  font-size: 11px;
+  color: #bfa399;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 3px;
+}
+.french-name {
+  font-size: 18px;
+  color: #4a3b37; /* 濃いブラウン（黒より優しく、かつ文字が超はっきり読める色） */
+}
+
+/* ボタン：フレンチヴィンテージな色合い */
+.french-btn {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+.btn-pink-rose {
+  background-color: #dcb3a6; /* 画像のリボンのような上品ピンク */
+  color: #ffffff !important;
+}
+.btn-pink-rose:hover {
+  background-color: #ca9d90;
+}
+.btn-gold-line {
+  background-color: transparent;
+  border: 1px solid #dcb3a6;
+  color: #a47568 !important;
+}
+.btn-gold-line:hover {
+  background-color: #fff5f2;
+}
+
+/* メインの決定・登録ボタン（アンティークなローズブラウン） */
+.french-footer {
+  text-align: center;
+  margin-top: 35px;
+}
+.french-main-btn {
+  display: block;
+  width: 100%;
+  background-color: #a47568; /* 深みのあるブラウンピンク */
+  color: #ffffff !important;
+  padding: 16px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(164, 117, 104, 0.2);
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+.french-main-btn:hover {
+  background-color: #8d5f53;
+  transform: translateY(-1px);
+}
+
+/* 入力欄（文字の読みやすさを最優先にした美しいフォーム） */
+.french-label {
+  display: block;
+  color: #4a3b37;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+.french-input {
+  width: 100%;
+  padding: 15px;
+  background-color: #ffffff;
+  border: 1px solid #ebd3cb;
+  border-radius: 30px; /* まあるい形 */
+  font-size: 16px;
+  color: #4a3b37;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+  transition: all 0.3s;
+}
+.french-input:focus {
+  outline: none;
+  border-color: #a47568;
+  box-shadow: 0 0 8px rgba(164, 117, 104, 0.2);
+}
+
+/* 戻るリンク */
+.french-back-area {
+  text-align: center;
+  margin-top: 25px;
+}
+.french-back-link {
+  color: #bfa399;
+  text-decoration: none;
+  font-size: 13px;
+}
+.french-back-link:hover {
+  color: #a47568;
+  text-decoration: underline;
+}
+
+/* エラーボックス */
+.french-error {
+  background-color: #fff5f5;
+  border: 1px solid #fcc;
+  color: #b83b3b;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  font-size: 13px;
+  text-align: left;
+}
+.french-empty {
+  color: #bfa399;
+  text-align: center;
+  padding: 40px 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* app/assets/stylesheets/nana_style.css */
+
+/* ========================================================
+   1. 全体のベース（古い中央揃えを完全に消し去る）
+   ======================================================== */
+   body, .french-bg {
+    background-color: #fdf3f0; /* 優しい明るめのピンクベージュ */
+    background-image: 
+      radial-gradient(#f5ded7 20%, transparent 20%),
+      radial-gradient(#f5ded7 20%, transparent 20%);
+    background-size: 30px 30px;
+    background-position: 0 0, 15px 15px;
+    margin: 0;
+    padding: 30px 10px;
+    min-height: 100vh;
+    font-family: 'Hiragino Mincho ProN', 'Georgia', serif;
+    box-sizing: border-box;
+    text-align: left !important;
+  }
+  
+  /* 中央の白いノートボード（横幅を 500px → 720px に大きくしました！） */
+  .french-container {
+    max-width: 720px; /* ★ここを大きく広げました！ */
+    width: 100%;
+    margin: 0 auto;
+    background-color: #ffffff; 
+    border: 3px solid #bc8f8f;  /* 上品なくすみローズ */
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(139, 90, 90, 0.15);
+    padding: 0;
+    text-align: left !important;
+  }
+  
+  /* ヘッダー */
+  .line-header {
+    background-color: #ffffff;
+    border-bottom: 2px dashed #f5ded7;
+    padding: 24px; /* 少しゆったり */
+    text-align: center !important;
+  }
+  .line-talk-title {
+    font-size: 24px; /* 文字も少し大きく */
+    font-weight: bold;
+    color: #704241;
+    margin: 0 0 6px 0;
+  }
+  .line-talk-subtitle {
+    font-size: 13px;
+    color: #bca09c;
+    margin: 0;
+    font-weight: bold;
+  }
+  
+  /* ========================================================
+     2. チャットルーム（縦の高さも 480px → 600px に拡大！）
+     ======================================================== */
+  .line-chat-room {
+    height: 600px; /* ★ここを縦に大きく伸ばしました！ */
+    overflow-y: auto;
+    padding: 30px 24px; /* 左右上下にゆとりを持たせました */
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    background-color: #fffbfb;
+    box-sizing: border-box;
+  }
+  
+  /* 共通の行スタイル */
+  .line-msg-row {
+    display: flex !important;
+    width: 100% !important;
+    text-align: left !important;
+  }
+  
+  /* --- AIメッセージ（左端） --- */
+  .line-msg-row.ai-side {
+    justify-content: flex-start !important;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .line-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #bc8f8f;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .line-msg-content {
+    display: flex;
+    flex-direction: column;
+    max-width: 80%; /* ★吹き出しが横に広く伸びるように調整 */
+  }
+  .line-author-name {
+    font-size: 14px;
+    color: #704241;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  /* AIの吹き出し：淡いくすみピンク */
+  .line-msg-row.ai-side .line-bubble {
+    background-color: #fbeee9 !important;
+    border: 1.5px solid #ebd3cb;
+    color: #2b1f1d !important;
+    border-radius: 2px 16px 16px 16px;
+  }
+  
+  /* --- あなたメッセージ（右端） --- */
+  .line-msg-row.user-side {
+    justify-content: flex-end !important;
+  }
+  /* あなたの吹き出し：濃いローズピンク */
+  .line-msg-row.user-side .line-bubble {
+    background-color: #bc8f8f !important;
+    color: #ffffff !important;
+    border-radius: 16px 2px 16px 16px;
+    max-width: 80%; /* ★吹き出しが横に広く伸びるように調整 */
+    margin-left: auto;
+  }
+  
+  /* 吹き出し共通の文字装飾 */
+  .line-bubble {
+    padding: 14px 20px; /* 中の余白を広げて見やすく */
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: bold;
+    word-break: break-all;
+    box-shadow: 0 2px 5px rgba(139, 90, 90, 0.05);
+  }
+  
+  /* システム表示（中央） */
+  .line-msg-row.center-side {
+    justify-content: center !important;
+  }
+  .line-system-badge {
+    background-color: rgba(188, 143, 143, 0.15);
+    color: #704241;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 6px 16px;
+    border-radius: 12px;
+  }
+  
+  /* ========================================================
+     3. 下部の入力エリア＆戻るリンク（横幅に合わせて拡大）
+     ======================================================== */
+  .line-input-bar {
+    background-color: #ffffff;
+    padding: 20px 24px; /* 横幅に合わせて余白をリッチに */
+    box-sizing: border-box;
+    border-top: 1px solid #f5ded7;
+  }
+  .line-input-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 2px solid #bc8f8f;
+    border-radius: 26px;
+    padding: 6px 8px 6px 20px;
+    gap: 12px;
+  }
+  .line-plus-icon { font-size: 22px; color: #bc8f8f; font-weight: bold; }
+  .line-text-field {
+    flex: 1;
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    color: #2b1f1d;
+    font-weight: bold;
+  }
+  .line-text-field:focus { outline: none; }
+  
+  .line-send-btn {
+    background-color: #bc8f8f;
+    color: #ffffff !important;
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .french-back-area {
+    background-color: #ffffff;
+    text-align: center !important;
+    padding: 0 0 20px 0;
+  }
+  .french-back-link {
+    color: #8b6969;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  /* カレンダーボタンのデザイン */
+  .french-btn-calendar {
+    background-color: #ffffff !important;
+    color: #b5651d !important;
+    border: 1px solid #d2a679 !important;
+    border-radius: 20px !important;
+    padding: 6px 14px !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .french-btn-calendar:hover {
+    background-color: #fff5ee !important;
+    color: #8b4513 !important;
+    border-color: #b5651d !important;
+    transform: translateY(-1px);
+  }

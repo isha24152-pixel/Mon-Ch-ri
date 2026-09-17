@@ -1,0 +1,2 @@
+class Nana < ApplicationRecord
+end
