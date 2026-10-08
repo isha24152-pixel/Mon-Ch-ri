@@ -41,17 +41,16 @@ class AiController < ApplicationController
       recent_history_text = recent_blocks.join("\n\n")
 
       # Gemini APIへの安全なリクエスト作成
-      api_key = ENV["GEMINI_API_KEY"]
-      uri = URI::HTTPS.build(
-        host: 'generativelanguage.googleapis.com',
-        path: '/v1beta/models/gemini-2.5-flash:generateContent',
-        query: 'key=' + api_key
-      )
-      
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = true
+     # APIキーを取得（未設定でも nil エラーにならないよう空文字を入れておく）
+    api_key = ENV["GEMINI_API_KEY"] || ""
 
-      request = Net::HTTP::Post.new(uri.request_uri, { 'Content-Type' => 'application/json' })
+    # 式展開を使ってURLを作成（nilエラーを100%防止）
+    uri = URI.parse("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=#{api_key}")
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+
+    request = Net::HTTP::Post.new(uri.request_uri, { 'Content-Type' => 'application/json' })
       
       # 過去3件分の履歴 + 今回の入力のみをGeminiに送信（これで超軽量化！）
       user_payload = "#{prompt_instruction}\n\n【これまでの会話（直近のみ）】\n#{recent_history_text}\n\nユーザーの入力:\n#{current_question}"
