@@ -83,4 +83,5 @@ Rails.application.configure do
   config.assets.configure do |env|
     env.cache = Sprockets::Cache::MemoryStore.new
   end
+ 
 end

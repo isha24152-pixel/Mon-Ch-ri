@@ -1,18 +1,26 @@
 Rails.application.routes.draw do
-  root "nanas#index"
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
+
+  # ログイン状態に応じたルート分岐
+  devise_scope :user do
+    # ログイン済みの場合はチャット画面へ
+    authenticated :user do
+      root to: 'ai#chat', as: :authenticated_root
+    end
+
+    # 未ログインの場合はログイン画面へ
+    unauthenticated do
+      root to: 'devise/sessions#new', as: :unauthenticated_root
+    end
+  end
+
   get 'ai', to: 'ai#chat'
-  resources :nanas
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  # Can be used by load balancers and uptime monitors to verify that the app is live.
-  get "up" => "rails/health#show", as: :rails_health_check
-
-  # Render dynamic PWA files from app/views/pwa/*
-  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
-  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-
-  # Defines the root path route ("/")
-  # root "posts#index"
-  get 'nanas/:id/calendar', to: 'ai#calendar', as: 'nana_calendar'
+  resources :nanas, except: [:index] do
+    member do
+      get :calendar
+    end
+  end
 end

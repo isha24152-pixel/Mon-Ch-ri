@@ -1,0 +1,12 @@
+<h2>ログイン / 新規登録</h2>
+
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+  <div class="field">
+    <%= f.label :email, "メールアドレス" %><br />
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
+  </div>
+
+  <div class="actions" style="margin-top: 15px;">
+    <%= f.submit "はじめる" %>
+  </div>
+<% end %>

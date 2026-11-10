@@ -1,3 +1,4 @@
+require 'cgi'
 require 'net/http'
 require 'uri'
 require 'json'
@@ -5,13 +6,11 @@ require 'erb'
 require 'ostruct'
 
 class AiController < ApplicationController
+  before_action :authenticate_user!
+
   def chat
-    @nana = Nana.find_by(id: params[:nana_id]) if params[:nana_id].present?
-    
-    if @nana.nil?
-      @ai_response = "⚠️ ナナのデータが見つかりません。"
-      return
-    end
+    # ログイン中のユーザー(current_user)に紐づくNanaを取得（無ければその人用に作成）
+    @nana = current_user.nanas.first || current_user.nanas.create!(name: "なぎさ")
 
     if params[:user_input].present?
       current_question = params[:user_input]
@@ -31,28 +30,20 @@ class AiController < ApplicationController
         ※image_keywordは、生き物の外見を表す短い英語のキーワード（カンマ区切り）にしてください。
       TEXT
 
-      # --- 履歴を「最新3件（往復）」だけに制限してAIに渡す処理 ---
       full_history = @nana.ai_response.presence || ""
-      # 過去のやり取り（「あなた:〜」「AI:〜」のペア）を分割
       blocks = full_history.split("\n\n").reject(&:blank?)
       
-      # 直近の最大6ブロック（ユーザー3件＋AI3件＝3往復分）だけを取得
       recent_blocks = blocks.last(6)
       recent_history_text = recent_blocks.join("\n\n")
 
-      # Gemini APIへの安全なリクエスト作成
-     # APIキーを取得（未設定でも nil エラーにならないよう空文字を入れておく）
-    api_key = ENV["GEMINI_API_KEY"] || ""
+      api_key = ENV["GEMINI_API_KEY"] || ""
+      uri = URI.parse("[https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=#](https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=#){api_key}")
 
-    # 式展開を使ってURLを作成（nilエラーを100%防止）
-    uri = URI.parse("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=#{api_key}")
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
 
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true
-
-    request = Net::HTTP::Post.new(uri.request_uri, { 'Content-Type' => 'application/json' })
+      request = Net::HTTP::Post.new(uri.request_uri, { 'Content-Type' => 'application/json' })
       
-      # 過去3件分の履歴 + 今回の入力のみをGeminiに送信（これで超軽量化！）
       user_payload = "#{prompt_instruction}\n\n【これまでの会話（直近のみ）】\n#{recent_history_text}\n\nユーザーの入力:\n#{current_question}"
 
       request.body = {
@@ -91,30 +82,22 @@ class AiController < ApplicationController
           keyword = "cute fantasy creature"
         end
 
-        encoded_prompt = ERB::Util.url_encode(keyword)
+        encoded_keyword = CGI.escape(keyword)
         random_seed = rand(10000..99999)
-        
-        img_uri = URI::HTTPS.build(
-          host: 'image.pollinations.ai',
-          path: '/prompt/' + encoded_prompt,
-          query: "seed=#{random_seed}&width=400&height=400&nologo=true"
-        )
-        image_url = img_uri.to_s
+        image_url = "[https://image.pollinations.ai/prompt/#](https://image.pollinations.ai/prompt/#){encoded_keyword}?seed=#{random_seed}&width=400&height=400&nologo=true&model=flux"
 
         formatted_ai_response = "#{formatted_text}\n\n[IMG_URL:#{image_url}]"
 
-        # 全履歴自体はDBに保存しておく（カレンダー用）
         updated_history = "#{full_history}あなた: #{current_question}\n\nAI: #{formatted_ai_response}\n\n"
         @nana.update(ai_response: updated_history)
 
-        # 画面表示用にも最新3往復＋今回の会話だけをセット
         all_blocks = updated_history.split("\n\n").reject(&:blank?)
-        @ai_response = all_blocks.last(8).join("\n\n") # 直近4往復分（今回分＋過去3件）
+        @ai_response = all_blocks.last(8).join("\n\n")
 
       elsif result["error"]
-        @ai_response = (full_history) + "\n⚠️ APIエラー: #{result['error']['message']}\n"
+        @ai_response = "#{full_history}\n⚠️ APIエラー: #{result['error']['message']}\n"
       else
-        @ai_response = (full_history) + "\n⚠️ レスポンスの取得に失敗しました。\n"
+        @ai_response = "#{full_history}\n⚠️ レスポンスの取得に失敗しました。\n"
       end
 
     else
@@ -123,22 +106,20 @@ class AiController < ApplicationController
         @nana.update(ai_response: initial_greeting)
         @ai_response = initial_greeting
       else
-        # 初期表示時も最新3往復のみ画面に出す
         blocks = (@nana.ai_response || "").split("\n\n").reject(&:blank?)
         @ai_response = blocks.last(6).join("\n\n")
       end
     end
   end
   
-  # カレンダー画面を表示するアクション
   def calendar
-    @nana = Nana.find(params[:id])
+    # 他人のカレンダーが見えないよう current_user から探す
+    @nana = current_user.nanas.find(params[:id])
     @logs = parse_history_to_logs(@nana.ai_response || "")
   end
 
   private
 
-  # 履歴テキストから画像URLや生き物の名前を抽出する処理
   def parse_history_to_logs(history_text)
     logs = []
     blocks = history_text.split(/(?=あなた: )/).reject(&:blank?)
@@ -147,7 +128,6 @@ class AiController < ApplicationController
       img_url = block.match(/\[IMG_URL:(.*?)\]/)&.captures&.first
       creature_name = block.match(/名前：(.*?)$/)&.captures&.first
       
-      # Hash ではなく OpenStruct で渡すことで simple_calendar が読み込めるようにする
       logs << OpenStruct.new(
         date: @nana.updated_at.to_date,
         content: block.gsub(/\[IMG_URL:.*?\]/, ''),
@@ -156,7 +136,6 @@ class AiController < ApplicationController
       )
     end
 
-    # 履歴が空の場合でもエラーにならないよう初期表示データを入れる
     if logs.empty?
       logs << OpenStruct.new(
         date: @nana.updated_at.to_date,

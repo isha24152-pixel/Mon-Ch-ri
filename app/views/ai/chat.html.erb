@@ -78,10 +78,10 @@
       </div>
     <% end %>
 
-    <div class="french-back-area">
-      <%= link_to "◀ 本棚（一覧）に戻る", nanas_path, class: "french-back-link" %>
-    </div>
+   <div class="french-back-area">
+  <%= button_to "ログアウト（ログイン画面に戻る）", destroy_user_session_path, method: :delete, class: "french-back-link" %>
+</div>
 
-   <%= link_to "📅 カレンダーを見る", nana_calendar_path(@nana), class: "french-back-link", style: "margin-left: 15px;" %>
+  <%= link_to "🗓️ カレンダーを見る", "#", class: "french-back-link", style: "margin-left: 15px;" %>
   </div>
 </div>

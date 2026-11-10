@@ -1,5 +1,6 @@
 source "https://rubygems.org"
 
+gem 'devise'
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.3", ">= 7.2.3.1"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
@@ -60,3 +61,4 @@ group :test do
 end
 
 gem 'simple_calendar', '~> 2.0'
+gem 'dotenv-rails', groups: [:development, :test]
