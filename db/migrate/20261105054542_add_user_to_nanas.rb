@@ -1,6 +1,5 @@
 class AddUserToNanas < ActiveRecord::Migration[7.0]
-def change
-  # null: false を取り除き、NULLを許可する設定に変更します
-  add_reference :nanas, :user, foreign_key: true
-end
+  def change
+    # 関連付けはCreateUsersで設定する
+  end
 end
