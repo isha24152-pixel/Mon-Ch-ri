@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_11_05_054542) do
+ActiveRecord::Schema[7.2].define(version: 2026_11_10_061919) do
   create_table "nanas", force: :cascade do |t|
     t.string "name"
     t.string "profile_image"

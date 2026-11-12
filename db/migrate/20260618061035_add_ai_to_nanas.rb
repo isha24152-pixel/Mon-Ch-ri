@@ -1,6 +1,6 @@
-class AddUserToNanas < ActiveRecord::Migration[7.0]
+class AddAiToNanas < ActiveRecord::Migration[7.2]
   def change
-    # null: false を外すことで、DB構築時のエラーを回避します
-    add_reference :nanas, :user, foreign_key: true
+    add_column :nanas, :ai_question, :text
+    add_column :nanas, :ai_response, :text
   end
 end
